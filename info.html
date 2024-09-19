@@ -2,79 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informasi Sistem Sederhana</title>
+    <title>IP Address & Hostname Auto</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 50px;
-            padding: 0;
             text-align: center;
+            margin-top: 50px;
         }
         h1 {
             color: #333;
         }
-        p {
-            font-size: 1.2em;
-            color: #555;
-        }
         .info-box {
-            margin: 20px auto;
-            padding: 20px;
             border: 1px solid #ddd;
-            border-radius: 10px;
-            width: 50%;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px;
+            display: inline-block;
+        }
+        #time {
+            font-size: 1.5em;
+            color: #555;
         }
     </style>
 </head>
 <body>
 
-    <h1>Informasi Sistem Sederhana</h1>
+    <h1>IP Address, Hostname, and Realtime Time</h1>
+    
+    <div class="info-box">
+        <h2>Your IP Address:</h2>
+        <p id="ip">Fetching IP...</p>
+    </div>
 
     <div class="info-box">
-        <!-- Menampilkan Hostname -->
-        <p><strong>Hostname:</strong> localhost.localdomain</p>
-
-        <!-- Menampilkan IP Address -->
-        <p><strong>IP Address:</strong> 192.168.56.101</p>
-
-        <!-- Menampilkan Waktu Saat Ini -->
-        
-        
-    </head>
-    <body>
-
-    
-        <div class="info-box">
-            <!-- Menampilkan Waktu Saat Ini -->
-            <p><strong>Waktu Saat Ini:</strong> <span id="current-time"></span></p>
-        </div>
-    
-        <script>
-            function updateTime() {
-                const now = new Date();
-                const options = {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: false,
-                    timeZoneName: 'short'
-                };
-                const timeString = now.toLocaleString('id-ID', options);
-                document.getElementById('current-time').textContent = timeString;
-            }
-    
-            // Memperbarui waktu setiap detik
-            setInterval(updateTime, 1000);
-    
-            // Panggil fungsi pertama kali untuk menampilkan waktu segera
-            updateTime();
-        </script>
+        <h2>Your Hostname:</h2>
+        <p id="hostname">Fetching Hostname...</p>
     </div>
+
+    <div class="info-box">
+        <h2>Current Time:</h2>
+        <p id="time">Fetching time...</p>
+    </div>
+
+    <script>
+        // Fetch the public IP address
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('ip').textContent = data.ip;
+            })
+            .catch(error => {
+                document.getElementById('ip').textContent = 'Unable to fetch IP';
+            });
+
+        // Fetch the hostname
+        document.getElementById('hostname').textContent = window.location.hostname;
+
+        // Realtime clock
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('time').textContent = now.toLocaleTimeString();
+        }
+        setInterval(updateTime, 1000); // Update every second
+        updateTime(); // Initial call to display immediately
+    </script>
 
 </body>
 </html>
